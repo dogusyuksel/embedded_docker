@@ -50,6 +50,6 @@ jobs:
           ${{ secrets.DOCKER_REPO }}:master
         context: .
         file: Dockerfile
-        pull: true
+        pull: false
         push: true
         provenance: false
