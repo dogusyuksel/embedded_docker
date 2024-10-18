@@ -32,7 +32,7 @@ RUN apt-get update && \
         gdb-multiarch \
         usbutils \
         libusb-1.0-0-dev \
-        apt install default-jdk \
+        default-jdk \
         splint && \
     apt-get -y clean
 
