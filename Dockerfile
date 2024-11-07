@@ -17,6 +17,10 @@ RUN apt-get update && \
         python3-dbg \
         python3-dev \
         python3-pip \
+        python3-pexpect \
+        python3-git \
+        python3-jinja2 \
+        python3-subunit \
         vim \
         language-pack-en-base \
         tree \
@@ -33,6 +37,22 @@ RUN apt-get update && \
         usbutils \
         libusb-1.0-0-dev \
         default-jdk \
+        gawk \
+        diffstat \
+        unzip \
+        texinfo \
+        chrpath \
+        cpio \
+        xz-utils \
+        debianutils \
+        iputils-ping \
+        libegl1-mesa \
+        libsdl1.2-dev \
+        xterm \
+        file \
+        mesa-common-dev \
+        zstd \
+        liblz4-tool \
         splint && \
     apt-get -y clean
 
