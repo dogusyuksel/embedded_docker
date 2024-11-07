@@ -59,7 +59,7 @@ RUN apt-get update && \
         splint && \
     apt-get -y clean
 
-RUN python3 -m pip install pyseria
+RUN python3 -m pip install pyserial
 
 RUN gem install ceedling
 RUN pip install gcovr
