@@ -53,8 +53,13 @@ RUN apt-get update && \
         mesa-common-dev \
         zstd \
         liblz4-tool \
+        bluetooth build-essential \
+        libglib2.0-dev \
+        libdbus-1-dev \
         splint && \
     apt-get -y clean
+
+RUN python3 -m pip install pyserial
 
 RUN gem install ceedling
 RUN pip install gcovr
