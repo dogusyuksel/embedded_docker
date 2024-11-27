@@ -56,6 +56,10 @@ RUN apt-get update && \
         bluetooth build-essential \
         libglib2.0-dev \
         libdbus-1-dev \
+        libncurses-dev \
+        flex \
+        bison \
+        gperf \
         splint && \
     apt-get -y clean
 
@@ -71,8 +75,8 @@ RUN pip install matplotlib
 RUN pip install pytest
 RUN python3 -m pip install flake8
 
-RUN cd /
-RUN git clone git://git.openembedded.org/bitbake
+RUN cd / && \
+    git clone git://git.openembedded.org/bitbake
 ENV PATH="${PATH}:/bitbake/bin"
 ENV PYTHONPATH="${PYTHONPATH}:/bitbake/lib"
 RUN pip install -r bitbake/toaster-requirements.txt
@@ -80,6 +84,17 @@ RUN pip install -r bitbake/toaster-requirements.txt
 RUN wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2 && \
     tar -xf gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
 ENV PATH="/gcc-arm-none-eabi-10.3-2021.10/bin:${PATH}"
+
+RUN pip install pyparsing==2.4.2
+RUN cd / && \
+    mkdir esp && \
+    cd esp && \
+    wget https://dl.espressif.com/dl/xtensa-lx106-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz && \
+    tar -xzf xtensa-lx106-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz
+ENV PATH="/esp/xtensa-lx106-elf/bin:${PATH}"
+RUN cd / && \
+    git clone --recursive https://github.com/espressif/ESP8266_RTOS_SDK.git ESP8266_RTOS_SDK && \
+    python3 -m pip install --user -r ESP8266_RTOS_SDK/requirements.txt
 
 CMD ["/bin/bash"]
 
