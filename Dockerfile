@@ -92,6 +92,9 @@ RUN cd / && \
     wget https://dl.espressif.com/dl/xtensa-lx106-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz && \
     tar -xzf xtensa-lx106-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz
 ENV PATH="/esp/xtensa-lx106-elf/bin:${PATH}"
+RUN cd / && \
+    git clone --recursive https://github.com/espressif/ESP8266_RTOS_SDK.git ESP8266_RTOS_SDK && \
+    python3 -m pip install --user -r ESP8266_RTOS_SDK/requirements.txt
 
 CMD ["/bin/bash"]
 
