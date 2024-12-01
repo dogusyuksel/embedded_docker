@@ -96,6 +96,18 @@ RUN cd / && \
     git clone --recursive https://github.com/espressif/ESP8266_RTOS_SDK.git ESP8266_RTOS_SDK && \
     python3 -m pip install --user -r ESP8266_RTOS_SDK/requirements.txt
 
+RUN cd /workspace && \
+    mkdir thirdparty && \
+    git clone https://github.com/STMicroelectronics/stm32l4xx_hal_driver.git thirdparty/STM32L4XX_HAL && \
+		git clone https://github.com/modm-io/cmsis-header-stm32.git thirdparty/cmsis-header-stm32 && \
+		git clone https://github.com/ARM-software/CMSIS_5.git thirdparty/CMSIS_5 && \
+		git clone https://github.com/FreeRTOS/FreeRTOS-Kernel.git thirdparty/FreeRTOS-Kernel && \
+		git clone https://github.com/STMicroelectronics/stm32f1xx_hal_driver.git thirdparty/STM32F103X_HAL && \
+		git clone https://github.com/dogusyuksel/embedded_linting.git thirdparty/linting && \
+		git clone https://github.com/mpaland/printf.git thirdparty/custom_printf && \
+		git clone https://github.com/STMicroelectronics/OpenOCD.git thirdparty/openocd && \
+		cat ./thirdparty/openocd/tcl/board/stm32f103c8_blue_pill.cfg | sed -e "s/set FLASH_SIZE 0x20000/set FLASH_SIZE 0x10000/" > ./thirdparty/openocd/tcl/board/stm32f103c8_custom.cfg
+
 CMD ["/bin/bash"]
 
 WORKDIR /workspace/
