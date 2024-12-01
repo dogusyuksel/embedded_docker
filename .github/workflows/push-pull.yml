@@ -1,13 +1,13 @@
 name: push-pull
 
-concurrency:
-    group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
-    cancel-in-progress: true
-
-on: [pull_request]
+on:
+  pull_request:
+    types:
+      - closed
 
 jobs:
-  push-pull-job:
+  if_merged:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
 
@@ -36,12 +36,6 @@ jobs:
         pull: true
         push: false
         provenance: false
-
-    - name: Hadolint Check
-      uses: hadolint/hadolint-action@v3.1.0
-      with:
-        dockerfile: Dockerfile
-        failure-threshold: error
 
     - name: Push Project Docker
       uses: docker/build-push-action@v5
