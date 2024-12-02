@@ -96,6 +96,10 @@ RUN cd / && \
     git clone --recursive https://github.com/espressif/ESP8266_RTOS_SDK.git ESP8266_RTOS_SDK && \
     python3 -m pip install --user -r ESP8266_RTOS_SDK/requirements.txt
 
+CMD ["/bin/bash"]
+
+WORKDIR /workspace/
+
 RUN cd /workspace && \
     mkdir thirdparty && \
     git clone https://github.com/STMicroelectronics/stm32l4xx_hal_driver.git thirdparty/STM32L4XX_HAL && \
@@ -108,6 +112,3 @@ RUN cd /workspace && \
 		git clone https://github.com/STMicroelectronics/OpenOCD.git thirdparty/openocd && \
 		cat ./thirdparty/openocd/tcl/board/stm32f103c8_blue_pill.cfg | sed -e "s/set FLASH_SIZE 0x20000/set FLASH_SIZE 0x10000/" > ./thirdparty/openocd/tcl/board/stm32f103c8_custom.cfg
 
-CMD ["/bin/bash"]
-
-WORKDIR /workspace/
