@@ -125,5 +125,5 @@ RUN cd /workspace && \
 		git checkout 87d8f0961a01bf09bef98ff89bae9fdec42181ee && \
 		mkdir build && cd build && cmake .. && make && \
 		cd /workspace && git clone -b kirkstone git://git.yoctoproject.org/poky.git && \
-		cd /workspace && git clone https://github.com/dogusyuksel/ti_cc2640r2f_sdk.git ti_cc2640r2f_sdk
+		cd /workspace && git clone https://github.com/dogusyuksel/ti_cc2640r2f_sdk.git ti_cc2640r2f_sdk \
 
