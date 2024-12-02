@@ -48,3 +48,7 @@ jobs:
       with:
         dockerfile: Dockerfile
         failure-threshold: error
+    - name: Bootloader Test Check
+      run: |
+        ./run_docker.sh ${{ secrets.DOCKER_REPO }}:master "cd / && ls -al && cd /workspace && ls -al && tree"
+
