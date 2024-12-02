@@ -115,6 +115,7 @@ RUN cd /workspace && \
 		cd /workspace/thirdparty/libcanard && \
 		git checkout 43de1c4966b8d1e5d57978949d63e697f045b358 && \
 		git submodule update --init --recursive && \
+  		cd /workspace && patch -d . -p1 < ./transport.py.patch && patch -d . -p1 < ./canard_stm32.patch && \
 		cd /workspace && \
 		git clone https://github.com/DaveGamble/cJSON.git cjson && \
 		cd cjson && \
