@@ -15,7 +15,7 @@ jobs:
         df . -h
         sudo rm -rf /usr/share/dotnet
         sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-      
+        df . -h
 
     - uses: actions/checkout@v4
       with:
