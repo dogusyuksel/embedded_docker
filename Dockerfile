@@ -110,5 +110,16 @@ RUN cd /workspace && \
 		git clone https://github.com/dogusyuksel/embedded_linting.git thirdparty/linting && \
 		git clone https://github.com/mpaland/printf.git thirdparty/custom_printf && \
 		git clone https://github.com/STMicroelectronics/OpenOCD.git thirdparty/openocd && \
-		cat ./thirdparty/openocd/tcl/board/stm32f103c8_blue_pill.cfg | sed -e "s/set FLASH_SIZE 0x20000/set FLASH_SIZE 0x10000/" > ./thirdparty/openocd/tcl/board/stm32f103c8_custom.cfg
+		cat ./thirdparty/openocd/tcl/board/stm32f103c8_blue_pill.cfg | sed -e "s/set FLASH_SIZE 0x20000/set FLASH_SIZE 0x10000/" > ./thirdparty/openocd/tcl/board/stm32f103c8_custom.cfg && \
+		git clone https://github.com/OpenCyphal/libcanard.git thirdparty/libcanard && \
+		cd /workspace/thirdparty/libcanard && \
+		git checkout 43de1c4966b8d1e5d57978949d63e697f045b358 && \
+		git submodule update --init --recursive && \
+		cd /workspace && \
+		git clone https://github.com/DaveGamble/cJSON.git cjson && \
+		cd cjson && \
+		git checkout 87d8f0961a01bf09bef98ff89bae9fdec42181ee && \
+		mkdir build && cd build && cmake .. && make && \
+		cd /workspace && git clone -b kirkstone git://git.yoctoproject.org/poky.git && \
+		cd /workspace && git clone https://github.com/dogusyuksel/ti_cc2640r2f_sdk.git ti_cc2640r2f_sdk
 
