@@ -100,4 +100,4 @@ CMD ["/bin/bash"]
 
 WORKDIR /workspace/
 
-COPY thirdparty /workspace/
+ADD thirdparty /workspace
