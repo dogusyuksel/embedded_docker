@@ -96,6 +96,8 @@ RUN cd / && \
     git clone --recursive https://github.com/espressif/ESP8266_RTOS_SDK.git ESP8266_RTOS_SDK && \
     python3 -m pip install --user -r ESP8266_RTOS_SDK/requirements.txt
 
+ADD /thirdparty/ /thirdparty
+
 CMD ["/bin/bash"]
 
 WORKDIR /workspace/
