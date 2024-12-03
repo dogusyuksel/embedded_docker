@@ -99,5 +99,5 @@ jobs:
     - name: check fs
       run: |
         df . -h
-        ./run_docker.sh ${{ secrets.DOCKER_REPO }}:master "cd / && ls -al && cd /workspace && ls -al"
+        ./run_docker.sh ${{ secrets.DOCKER_REPO }}:master "cd / && ls -al && cd /workspace && ls -al && ls -al thirdpart"
 
