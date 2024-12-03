@@ -37,7 +37,7 @@ jobs:
         git checkout 87d8f0961a01bf09bef98ff89bae9fdec42181ee
         mkdir build && cd build && cmake .. && make
         cd ../../ && git clone -b kirkstone git://git.yoctoproject.org/poky.git
-        cd /workspace && git clone https://github.com/dogusyuksel/ti_cc2640r2f_sdk.git ti_cc2640r2f_sdk
+        git clone https://github.com/dogusyuksel/ti_cc2640r2f_sdk.git ti_cc2640r2f_sdk
 
     - uses: actions/checkout@v4
       with:
@@ -70,7 +70,8 @@ jobs:
       with:
         dockerfile: Dockerfile
         failure-threshold: error
-    - name: Bootloader Test Check
+
+    - name: check fs
       run: |
-        ./run_docker.sh ${{ secrets.DOCKER_REPO }}:master "cd / && ls -al && cd /workspace && ls -al && tree"
+        ./run_docker.sh ${{ secrets.DOCKER_REPO }}:master "cd / && ls -al && tree thirdparty cd /workspace && ls -al && tree"
 
