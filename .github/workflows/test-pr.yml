@@ -18,6 +18,8 @@ jobs:
 
     - name: preparation
       run: |
+        apt-get install ncdu
+        ncdu -x /
         df . -h
         sudo rm -rf /usr/share/dotnet
         sudo rm -rf "$AGENT_TOOLSDIRECTORY"
