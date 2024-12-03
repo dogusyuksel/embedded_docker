@@ -19,7 +19,9 @@ jobs:
     - name: preparation
       run: |
         sudo apt-get install ncdu
-        ncdu -x /
+        ncdu -x / -o dodo.json
+        cat dodo.json
+        ncdu -f dodo.json
         df . -h
         sudo rm -rf /usr/share/dotnet
         sudo rm -rf "$AGENT_TOOLSDIRECTORY"
