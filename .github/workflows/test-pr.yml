@@ -10,6 +10,12 @@ jobs:
   test-pr-job:
     runs-on: ubuntu-latest
     steps:
+    
+    - uses: actions/checkout@v4
+      with:
+        github-server-url: https://github.com/dogusyuksel/embedded_docker
+        lfs: true
+
     - name: preparation
       run: |
         df . -h
@@ -39,11 +45,6 @@ jobs:
         cd ../../ && git clone -b kirkstone git://git.yoctoproject.org/poky.git
         git clone https://github.com/dogusyuksel/ti_cc2640r2f_sdk.git ti_cc2640r2f_sdk
         cd .. && ls -al && ls -al thirdparty
-
-    - uses: actions/checkout@v4
-      with:
-        github-server-url: https://github.com/dogusyuksel/embedded_docker
-        lfs: true
 
     - name: Login to Docker Hub
       uses: docker/login-action@v3
