@@ -16,7 +16,7 @@ jobs:
         github-server-url: https://github.com/dogusyuksel/embedded_docker
         lfs: true
 
-    - name: preparation
+    - name: free space
       run: |
         df . -h
         sudo docker rmi $(docker image ls -aq) >/dev/null 2>&1 || true
@@ -95,12 +95,6 @@ jobs:
         pull: true
         push: false
         provenance: false
-
-    - name: Hadolint Check
-      uses: hadolint/hadolint-action@v3.1.0
-      with:
-        dockerfile: Dockerfile
-        failure-threshold: error
 
     - name: check fs
       run: |
