@@ -98,6 +98,6 @@ RUN cd / && \
 
 CMD ["/bin/bash"]
 
-COPY thirdparty .
-
 WORKDIR /workspace/
+
+COPY thirdparty /workspace/
