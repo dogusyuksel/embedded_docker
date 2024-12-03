@@ -38,6 +38,7 @@ jobs:
         mkdir build && cd build && cmake .. && make
         cd ../../ && git clone -b kirkstone git://git.yoctoproject.org/poky.git
         git clone https://github.com/dogusyuksel/ti_cc2640r2f_sdk.git ti_cc2640r2f_sdk
+        cd .. && ls -al && ls -al thirdparty
 
     - uses: actions/checkout@v4
       with:
