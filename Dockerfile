@@ -60,6 +60,12 @@ RUN apt-get update && \
         flex \
         bison \
         gperf \
+        doxygen \
+        ninja-build \
+        ccache \
+        libffi-dev \
+        libssl-dev \
+        dfu-util \
         splint && \
     apt-get -y clean
 
@@ -95,6 +101,14 @@ ENV PATH="/esp/xtensa-lx106-elf/bin:${PATH}"
 RUN cd / && \
     git clone --recursive https://github.com/espressif/ESP8266_RTOS_SDK.git ESP8266_RTOS_SDK && \
     python3 -m pip install --user -r ESP8266_RTOS_SDK/requirements.txt
+RUN cd / && \
+    git clone -b v5.3.2 --recursive https://github.com/espressif/esp-idf.git esp-idf && \
+    cd esp-idf && \
+    apt install -y python3.10-venv && \
+    ./install.sh esp32,esp32s2,esp32s3 && \
+    . ./export.sh && \
+    git clone https://github.com/espressif/esp32-camera.git && \
+    idf.py add-dependency "espressif/esp32-camera"
 
 ADD /patches/ /thirdparty
 
