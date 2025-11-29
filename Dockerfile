@@ -142,7 +142,6 @@ RUN cd / && \
 # Yocto/Bitbake related
 RUN cd / && git clone git://git.openembedded.org/bitbake
 ENV PATH="${PATH}:/bitbake/bin"
-ENV PYTHONPATH="/bitbake/lib"
 ENV PYTHONPATH="${PYTHONPATH}:/bitbake/lib"
 RUN pip install -r bitbake/toaster-requirements.txt
 

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for mk in $(find . -name Makefile); do
+    dir=$(dirname "$mk")
+    echo "Running make in: $dir"
+    make -C "$dir"
+done

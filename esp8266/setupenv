@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# because of some dependency issues, we need to set pyparsing explicitly
+pip install pyparsing==2.4.2
+
+# clone esp8266 sdk
+echo "==================> clone esp8266 sdk"
+if [ ! -d "ESP8266_RTOS_SDK" ]; then
+    git clone --recursive https://github.com/espressif/ESP8266_RTOS_SDK.git ESP8266_RTOS_SDK
+    cd ESP8266_RTOS_SDK && git checkout 2f586ea43f18a7d818c32b746a73e3302ad14ce2 && cd -
+    python3 -m pip install --user -r ESP8266_RTOS_SDK/requirements.txt
+fi
+
+# clone and build esp8266 module
+echo "==================> clone and build esp8266 module"
+if [ ! -d "esp8266" ]; then
+    git clone https://github.com/dogusyuksel/esp-8266.git esp8266
+fi
+export IDF_PATH="/workspace/esp8266/ESP8266_RTOS_SDK" # important step
+cd esp8266
+./build_all.sh
+cd -

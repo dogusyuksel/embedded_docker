@@ -1,0 +1,5 @@
+cjson
+esp8266/ESP8266_RTOS_SDK/
+esp8266/esp8266/
+
+*.exe

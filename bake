@@ -1,0 +1,76 @@
+#!/bin/bash
+
+print_help() {
+    echo "This script is used for setting up the environment."
+    echo "Options are are:"
+    echo "  --verbose               : Enable verbose output"
+    echo "  --module <module_name>  : Specify a module to include (can be used multiple times)"
+    echo "                          : Available modules are: helper, esp8266"
+}
+
+# args
+PARSED=$(getopt \
+    --options "" \
+    --longoptions verbose,help,module: \
+    --name "$0" \
+    -- "$@"
+)
+
+# if getopt failed, then return
+if [[ $? -ne 0 ]]; then exit 1; fi
+
+# set not-parsed parameters
+eval set -- "$PARSED"
+
+VERBOSE=0
+MODULES=()   # list
+
+while true; do
+    case "$1" in
+        --help)
+            print_help
+            exit 0
+            ;;
+        --verbose)
+            VERBOSE=1
+            shift
+            ;;
+        --module)
+            MODULES+=("$2")   # add into the list
+            shift 2
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
+
+echo "Verbose: $VERBOSE"
+
+echo "Modules:"
+for item in "${MODULES[@]}"; do
+    echo "    - $item"
+done
+
+echo "==================> Lets download and compile common dependencies..."
+
+echo "==================> CJSON"
+# CJSON
+if [ ! -d "cjson" ]; then
+    git clone https://github.com/DaveGamble/cJSON.git cjson
+    cd cjson && git checkout 87d8f0961a01bf09bef98ff89bae9fdec42181ee && cd -
+fi
+cd cjson && mkdir build
+cd build && cmake .. && make && cd ../../
+
+
+
+echo "==================> Lets download and compile modules"
+for item in "${MODULES[@]}"; do
+    ./dyshell -b -s -c "cd /workspace/$item && ./setupenv && cd -"
+done
