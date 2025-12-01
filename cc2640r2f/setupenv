@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# because of some dependency issues
+# none
+
+# clone cc2640r2 sdk
+echo "==================> clone cc2640r2 sdk"
+if [ ! -d "ti_cc2640r2f_sdk" ]; then
+    git clone https://github.com/dogusyuksel/ti_cc2640r2f_sdk.git ti_cc2640r2f_sdk
+fi
+
+
+# clone and build cc2640r2f module
+echo "==================> clone and build cc2640r2f module"
+if [ ! -d "cc2640r2f" ]; then
+    git clone https://github.com/dogusyuksel/cc2640r2f_ble.git cc2640r2f
+fi
+source environment
+
+# set linker cmd file
+LINKER_FILE="./cc2640r2f/firmware/ble5_simple_peripheral_cc2640r2lp_stack_library/FlashROM_Library/lib_linker.cmd"
+# replace /thirdparty with actual path
+sed -i "s|/thirdparty|/workspace/cc2640r2f|g" "$LINKER_FILE"
+echo "==================> linker file manually edited"
+
+cd cc2640r2f/firmware/ble5_simple_peripheral_cc2640r2lp_app
+make -C ./FlashROM_StackLibrary/ clean
+make -C ./FlashROM_StackLibrary/ all
+cd -

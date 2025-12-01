@@ -3,5 +3,7 @@ esp8266/ESP8266_RTOS_SDK/
 esp8266/esp8266/
 esp32cam/esp-idf/
 esp32cam/esp32cam/
+cc2640r2f/ti_cc2640r2f_sdk/
+cc2640r2f/cc2640r2f/
 
 *.exe

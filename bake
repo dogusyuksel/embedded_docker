@@ -5,7 +5,11 @@ print_help() {
     echo "Options are are:"
     echo "  --verbose               : Enable verbose output"
     echo "  --module <module_name>  : Specify a module to include (can be used multiple times)"
-    echo "                          : Available modules are: helper, esp8266, esp32cam"
+    echo "                          : Available modules are:"
+    echo "                              - helper"
+    echo "                              - esp8266"
+    echo "                              - esp32cam"
+    echo "                              - cc2640r2f"
 }
 
 # args
