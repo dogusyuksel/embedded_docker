@@ -133,12 +133,6 @@ RUN wget https://github.com/renode/renode/releases/download/v${RENODE_VERSION}/r
     rm -rf /var/lib/apt/lists/*
 RUN pip3 install -r /opt/renode/tests/requirements.txt --no-cache-dir
 
-# ESP32 related
-RUN cd / && \
-    git clone -b v5.3.2 --recursive https://github.com/espressif/esp-idf.git esp-idf && \
-    cd esp-idf && ./install.sh esp32,esp32s2,esp32s3 && . ./export.sh && \
-    git clone https://github.com/espressif/esp32-camera.git && idf.py add-dependency "espressif/esp32-camera"
-
 # Yocto/Bitbake related
 RUN cd / && git clone git://git.openembedded.org/bitbake
 ENV PATH="${PATH}:/bitbake/bin"

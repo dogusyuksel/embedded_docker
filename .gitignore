@@ -1,5 +1,7 @@
 cjson
 esp8266/ESP8266_RTOS_SDK/
 esp8266/esp8266/
+esp32cam/esp-idf/
+esp32cam/esp32cam/
 
 *.exe
