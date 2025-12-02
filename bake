@@ -11,6 +11,7 @@ print_help() {
     echo "                              - esp32cam"
     echo "                              - cc2640r2f"
     echo "                              - stm32l4a6_freertos"
+    echo "                              - stm32f103_libcanard"
 }
 
 # args
@@ -68,10 +69,25 @@ echo "==================> CJSON"
 # CJSON
 if [ ! -d "cjson" ]; then
     git clone https://github.com/DaveGamble/cJSON.git cjson
-    cd cjson && git checkout 87d8f0961a01bf09bef98ff89bae9fdec42181ee && cd -
+    cd cjson && git checkout 87d8f0961a01bf09bef98ff89bae9fdec42181ee
+    mkdir build && cd build && cmake .. && make && cd ../../
 fi
-cd cjson && mkdir build
-cd build && cmake .. && make && cd ../../
+
+echo "==================> libcanard"
+# libcanard
+if [ ! -d "libcanard" ]; then
+    git clone https://github.com/OpenCyphal/libcanard.git libcanard
+    cd libcanard && git checkout 43de1c4966b8d1e5d57978949d63e697f045b358
+    git submodule update --init --recursive
+    cp -rf ../libcanard_patches/* .
+    patch -d . -p1 < canard_stm32.patch && patch -d . -p1 < transport.py.patch
+fi
+
+echo "==================> custom_printf"
+# custom_printf
+if [ ! -d "custom_printf" ]; then
+    git clone https://github.com/mpaland/printf.git custom_printf
+fi
 
 echo "==================> Lets download selected modules' dependencies"
 for item in "${MODULES[@]}"; do
@@ -81,11 +97,13 @@ for item in "${MODULES[@]}"; do
     if [[ "$item" == *"stm32f103_libcanard"* ]]; then
         git clone https://github.com/STMicroelectronics/stm32f1xx-hal-driver.git STM32F103X_HAL
     fi
-    if [[ "$str" == *"stm32l4a6_freertos"* || "$str" == *"stm32f103_libcanard"* ]]; then #  || "$str" == *"c"* ]]; then
+    if [[ "$item" == *"stm32l4a6_freertos"* || "$item" == *"stm32f103_libcanard"* ]]; then
         git clone https://github.com/modm-io/cmsis-header-stm32.git cmsis-header-stm32
         git clone https://github.com/ARM-software/CMSIS_5.git CMSIS_5
         git clone https://github.com/FreeRTOS/FreeRTOS-Kernel.git FreeRTOS-Kernel
+
         git clone https://github.com/STMicroelectronics/OpenOCD.git openocd
+         cat openocd/tcl/board/stm32f103c8_blue_pill.cfg | sed -e "s/set FLASH_SIZE 0x20000/set FLASH_SIZE 0x10000/" > openocd/tcl/board/stm32f103c8_custom.cfg
     fi
 done
 

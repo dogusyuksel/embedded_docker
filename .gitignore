@@ -1,4 +1,5 @@
 cjson
+libcanard
 cmsis-header-stm32
 CMSIS_5
 FreeRTOS-Kernel
@@ -15,6 +16,7 @@ esp32cam/esp32cam/
 cc2640r2f/ti_cc2640r2f_sdk/
 cc2640r2f/cc2640r2f/
 stm32l4a6_freertos/stm32l4a6_freertos/
+stm32f103_libcanard/stm32f103_libcanard/
 
 
 *.exe
