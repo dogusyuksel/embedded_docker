@@ -14,6 +14,7 @@ print_help() {
     echo "                              - stm32f103_libcanard"
     echo "                              - bbb_yocto"
     echo "                              - atmega328p"
+    echo "                              - libcsp_works"
 }
 
 # args
@@ -83,6 +84,13 @@ if [ ! -d "libcanard" ]; then
     git submodule update --init --recursive
     cp -rf ../libcanard_patches/* .
     patch -d . -p1 < canard_stm32.patch && patch -d . -p1 < transport.py.patch
+fi
+
+echo "==================> libcsp"
+# libcsp
+if [ ! -d "libcsp" ]; then
+    git clone https://github.com/libcsp/libcsp.git libcsp
+    cd libcsp && git checkout 48f7fb0b57f610bf65bab1aa2d1357c3b9722782 && cd -
 fi
 
 echo "==================> custom_printf"

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# clone and build libcsp_works module
+echo "==================> clone and build libcsp_works module"
+if [ ! -d "libcsp_works" ]; then
+    git clone https://github.com/dogusyuksel/libcsp-works.git libcsp_works
+    cd libcsp_works && git submodule update --init --recursive && cd -
+fi
+
+export WORKSPACE_PATH="/workspace/libcsp_works/libcsp_works"
+cd libcsp_works/rust-server
+cd bindings-creator && cargo clean && cargo build && cd -
+cd csp-server && cargo clean && cargo build && cd -
+cd ../../

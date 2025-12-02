@@ -46,6 +46,7 @@ RUN apt-get update && \
         libncurses5-dev \
         cmake \
         gdb \
+        clang \
         clang-format \
         unzip \
         ruby \
@@ -71,6 +72,11 @@ RUN apt-get update && \
         zstd \
         liblz4-tool \
         python3.10-venv \
+        curl \
+        autoconf \
+        automake \
+        libtool \
+        libzmq3-dev \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get -y clean
 
@@ -144,6 +150,15 @@ RUN cd / && mkdir esp && cd esp && \
     wget https://dl.espressif.com/dl/xtensa-lx106-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz && \
     tar -xzf xtensa-lx106-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz
 ENV PATH="/esp/xtensa-lx106-elf/bin:${PATH}"
+
+# rust related
+# Rust + Cargo
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+    | sh -s -- -y
+# cargo and rust path
+ENV PATH="/root/.cargo/bin:${PATH}"
+# test cargo
+RUN cargo --version && rustc --version
 
 CMD ["/bin/bash"]
 
