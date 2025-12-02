@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# because of some dependency issues
-# none
-
 # clone esp32 idf and camera module
 echo "==================> clone esp32 idf and camera module"
 if [ ! -d "esp-idf" ]; then

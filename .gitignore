@@ -17,6 +17,7 @@ cc2640r2f/ti_cc2640r2f_sdk/
 cc2640r2f/cc2640r2f/
 stm32l4a6_freertos/stm32l4a6_freertos/
 stm32f103_libcanard/stm32f103_libcanard/
-
+bbb_yocto/poky/
+bbb_yocto/bbb_yocto/
 
 *.exe

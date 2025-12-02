@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# because of some dependency issues
-# none
-
 # since we are building more than one stm32 module in this project, we treat their depedencies common and handled in parent folder
 # so we dont need to do anything here
 

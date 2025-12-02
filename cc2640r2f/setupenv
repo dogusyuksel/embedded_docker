@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# because of some dependency issues
-# none
-
 # clone cc2640r2 sdk
 echo "==================> clone cc2640r2 sdk"
 if [ ! -d "ti_cc2640r2f_sdk" ]; then

@@ -12,6 +12,7 @@ print_help() {
     echo "                              - cc2640r2f"
     echo "                              - stm32l4a6_freertos"
     echo "                              - stm32f103_libcanard"
+    echo "                              - bbb_yocto"
 }
 
 # args
@@ -109,5 +110,10 @@ done
 
 echo "==================> Lets download and compile modules"
 for item in "${MODULES[@]}"; do
-    ./dyshell -b -s -c "cd /workspace/$item && ./setupenv && cd -"
+    if [[ "$item" == *"bbb_yocto"* ]]; then
+        ## special case for bbb_yocto, it cannot be run as root
+        ./dyshell -b -c "cd /workspace/$item && ./setupenv && cd -"
+    else
+        ./dyshell -b -s -c "cd /workspace/$item && ./setupenv && cd -"
+    fi
 done
