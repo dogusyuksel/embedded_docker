@@ -15,6 +15,6 @@ if [ ! -d "poky" ]; then
 fi
 
 cd /workspace/bbb_yocto/bbb_yocto/build && bitbake-layers add-layer /workspace/bbb_yocto/bbb_yocto/meta-custom && bitbake-layers show-recipes hello
-bitbake hello && ls -l /tmp/deploy/rpm/cortexa8hf_neon/ | grep hello
+bitbake hello && ls -l ./tmp/deploy/rpm/*/ | grep hello
 echo 'RUN THIS (BUT CANNOT BECAUSE OF MEMORY) ==> cd /workspace/bbb_yocto/bbb_yocto/build && bitbake core-image-full-cmdline && find . -name "*.wic"'
 

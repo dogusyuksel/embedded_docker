@@ -19,5 +19,6 @@ stm32l4a6_freertos/stm32l4a6_freertos/
 stm32f103_libcanard/stm32f103_libcanard/
 bbb_yocto/poky/
 bbb_yocto/bbb_yocto/
+atmega328p/atmega328p/
 
 *.exe

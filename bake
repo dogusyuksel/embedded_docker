@@ -13,6 +13,7 @@ print_help() {
     echo "                              - stm32l4a6_freertos"
     echo "                              - stm32f103_libcanard"
     echo "                              - bbb_yocto"
+    echo "                              - atmega328p"
 }
 
 # args
