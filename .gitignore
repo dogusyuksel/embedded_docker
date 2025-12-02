@@ -1,9 +1,20 @@
 cjson
+cmsis-header-stm32
+CMSIS_5
+FreeRTOS-Kernel
+STM32F103X_HAL
+custom_printf
+openocd
+STM32L4XX_HAL
+STM32F103X_HAL
+
 esp8266/ESP8266_RTOS_SDK/
 esp8266/esp8266/
 esp32cam/esp-idf/
 esp32cam/esp32cam/
 cc2640r2f/ti_cc2640r2f_sdk/
 cc2640r2f/cc2640r2f/
+stm32l4a6_freertos/stm32l4a6_freertos/
+
 
 *.exe

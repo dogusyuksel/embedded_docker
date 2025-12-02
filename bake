@@ -10,6 +10,7 @@ print_help() {
     echo "                              - esp8266"
     echo "                              - esp32cam"
     echo "                              - cc2640r2f"
+    echo "                              - stm32l4a6_freertos"
 }
 
 # args
@@ -72,7 +73,21 @@ fi
 cd cjson && mkdir build
 cd build && cmake .. && make && cd ../../
 
-
+echo "==================> Lets download selected modules' dependencies"
+for item in "${MODULES[@]}"; do
+    if [[ "$item" == *"stm32l4a6_freertos"* ]]; then
+        git clone https://github.com/STMicroelectronics/stm32l4xx_hal_driver.git STM32L4XX_HAL
+    fi
+    if [[ "$item" == *"stm32f103_libcanard"* ]]; then
+        git clone https://github.com/STMicroelectronics/stm32f1xx-hal-driver.git STM32F103X_HAL
+    fi
+    if [[ "$str" == *"stm32l4a6_freertos"* || "$str" == *"stm32f103_libcanard"* ]]; then #  || "$str" == *"c"* ]]; then
+        git clone https://github.com/modm-io/cmsis-header-stm32.git cmsis-header-stm32
+        git clone https://github.com/ARM-software/CMSIS_5.git CMSIS_5
+        git clone https://github.com/FreeRTOS/FreeRTOS-Kernel.git FreeRTOS-Kernel
+        git clone https://github.com/STMicroelectronics/OpenOCD.git openocd
+    fi
+done
 
 echo "==================> Lets download and compile modules"
 for item in "${MODULES[@]}"; do
