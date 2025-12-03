@@ -15,6 +15,7 @@ print_help() {
     echo "                              - bbb_yocto"
     echo "                              - atmega328p"
     echo "                              - libcsp_works"
+    echo "                              - renode"
 }
 
 # args

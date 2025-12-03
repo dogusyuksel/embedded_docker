@@ -23,5 +23,6 @@ bbb_yocto/bbb_yocto/
 atmega328p/atmega328p/
 libcsp_works/libcsp_works/
 helper/libcanard_sniffer/build/
+renode/renode/
 
 *.exe
