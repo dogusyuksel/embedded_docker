@@ -124,6 +124,8 @@ RUN pip install numpy==2.0.2
 RUN pip install skyfield==1.53
 RUN pip install pikepdf==9.8.1
 RUN pip install pyparsing==2.4.2
+RUN pip install flask==3.1.2
+RUN pip install jsonify==0.5
 
 # Install non-eabi-gcc
 RUN wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2 && \
