@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# clone and build bbb_yocto module
+echo "==================> clone and build bbb_yocto module"
+if [ ! -d "bbb_yocto" ]; then
+    git clone https://github.com/dogusyuksel/bbb-yocto.git bbb_yocto
+fi
+
+# clone kirkstone poky module
+echo "==================> clone kirkstone poky"
+if [ ! -d "poky" ]; then
+    git clone -b kirkstone git://git.yoctoproject.org/poky.git poky
+    cd bbb_yocto && source /workspace/bbb_yocto/poky/oe-init-build-env
+    sed -i 's|^#MACHINE ?= "beaglebone-yocto"|MACHINE ?= "beaglebone-yocto"\nRM_OLD_IMAGE = "1"\nINHERIT += "rm_work"|' /workspace/bbb_yocto/bbb_yocto/build/local.conf
+fi
+
+cd /workspace/bbb_yocto/bbb_yocto/build && bitbake-layers add-layer /workspace/bbb_yocto/bbb_yocto/meta-custom && bitbake-layers show-recipes hello
+bitbake hello && ls -l ./tmp/deploy/rpm/*/ | grep hello
+echo 'RUN THIS (BUT CANNOT BECAUSE OF MEMORY) ==> cd /workspace/bbb_yocto/bbb_yocto/build && bitbake core-image-full-cmdline && find . -name "*.wic"'
+

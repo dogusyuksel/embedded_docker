@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# clone and build atmega328p module
+echo "==================> clone and build atmega328p module"
+if [ ! -d "atmega328p" ]; then
+    git clone https://github.com/dogusyuksel/atmega328p.git atmega328p
+fi
+
+cd atmega328p && make && cd -

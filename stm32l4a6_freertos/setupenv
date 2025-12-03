@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# since we are building more than one stm32 module in this project, we treat their depedencies common and handled in parent folder
+# so we dont need to do anything here
+
+# clone and build stm32l4a6_freertos module
+echo "==================> clone and build stm32l4a6_freertos module"
+if [ ! -d "stm32l4a6_freertos" ]; then
+    git clone https://github.com/dogusyuksel/rtos_hal_stm32.git stm32l4a6_freertos
+    # we need to edit some paths to make it work in our multi-module workspace
+    sed -i 's|/workspace|/workspace/stm32l4a6_freertos/stm32l4a6_freertos|g' stm32l4a6_freertos/meta-rtos/classes/base.bbclass
+    sed -i 's|/workspace|/workspace/stm32l4a6_freertos/stm32l4a6_freertos|g' stm32l4a6_freertos/meta-rtos/recipes-core/queueisr/queueisr_0.1.bb
+    sed -i 's|/workspace|/workspace/stm32l4a6_freertos/stm32l4a6_freertos|g' stm32l4a6_freertos/meta-rtos/recipes-core/taskcreate/taskcreate_0.1.bb
+    sed -i 's|/workspace|/workspace/stm32l4a6_freertos/stm32l4a6_freertos|g' stm32l4a6_freertos/meta-rtos/recipes-core/mutex/mutex_0.1.bb
+    sed -i 's|/workspace|/workspace/stm32l4a6_freertos/stm32l4a6_freertos|g' stm32l4a6_freertos/meta-rtos/recipes-core/tasknotify/tasknotify_0.1.bb
+    sed -i 's|/workspace|/workspace/stm32l4a6_freertos/stm32l4a6_freertos|g' stm32l4a6_freertos/meta-rtos/recipes-core/qsetandsemaphore/qsetandsemaphore_0.1.bb
+    sed -i 's|/workspace|/workspace/stm32l4a6_freertos/stm32l4a6_freertos|g' stm32l4a6_freertos/meta-rtos/recipes-core/timer/timer_0.1.bb
+    sed -i 's|/workspace|/workspace/stm32l4a6_freertos/stm32l4a6_freertos|g' stm32l4a6_freertos/meta-rtos/recipes-core/streambuffer/streambuffer_0.1.bb
+    sed -i 's|^THIRDPARTY ?=.*|THIRDPARTY ?= "/workspace"|' stm32l4a6_freertos/meta-rtos/classes/base.bbclass
+fi
+
+cd stm32l4a6_freertos/build && ./build_all.sh && cd -

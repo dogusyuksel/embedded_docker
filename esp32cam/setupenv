@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# clone esp32 idf and camera module
+echo "==================> clone esp32 idf and camera module"
+if [ ! -d "esp-idf" ]; then
+    git clone -b v5.3.2 --recursive https://github.com/espressif/esp-idf.git esp-idf
+fi
+cd esp-idf
+./install.sh esp32,esp32s2,esp32s3
+. ./export.sh
+if [ ! -d "esp32-camera" ]; then
+    git clone https://github.com/espressif/esp32-camera.git
+fi
+cd esp32-camera && git checkout 38674c1f1570c63c4db4fcf21cf6cbf3bc595de4 && cd -
+idf.py add-dependency "espressif/esp32-camera"
+cd ..
+
+# clone and build esp32cam module
+echo "==================> clone and build esp32cam module"
+if [ ! -d "esp32cam" ]; then
+    git clone https://github.com/dogusyuksel/esp32-cam.git esp32cam
+fi
+cd esp-idf
+. ./export.sh
+cd ../esp32cam/ip_camera
+idf.py build
+cd ../..

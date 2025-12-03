@@ -1,0 +1,129 @@
+#!/bin/bash
+
+print_help() {
+    echo "This script is used for setting up the environment."
+    echo "Options are are:"
+    echo "  --verbose               : Enable verbose output"
+    echo "  --module <module_name>  : Specify a module to include (can be used multiple times)"
+    echo "                          : Available modules are:"
+    echo "                              - helper"
+    echo "                              - esp8266"
+    echo "                              - esp32cam"
+    echo "                              - cc2640r2f"
+    echo "                              - stm32l4a6_freertos"
+    echo "                              - stm32f103_libcanard"
+    echo "                              - bbb_yocto"
+    echo "                              - atmega328p"
+    echo "                              - libcsp_works"
+    echo "                              - renode"
+}
+
+# args
+PARSED=$(getopt \
+    --options "" \
+    --longoptions verbose,help,module: \
+    --name "$0" \
+    -- "$@"
+)
+
+# if getopt failed, then return
+if [[ $? -ne 0 ]]; then exit 1; fi
+
+# set not-parsed parameters
+eval set -- "$PARSED"
+
+VERBOSE=0
+MODULES=()   # list
+
+while true; do
+    case "$1" in
+        --help)
+            print_help
+            exit 0
+            ;;
+        --verbose)
+            VERBOSE=1
+            shift
+            ;;
+        --module)
+            MODULES+=("$2")   # add into the list
+            shift 2
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
+
+echo "Verbose: $VERBOSE"
+
+echo "Modules:"
+for item in "${MODULES[@]}"; do
+    echo "    - $item"
+done
+
+echo "==================> Lets download and compile common dependencies..."
+
+echo "==================> CJSON"
+# CJSON
+if [ ! -d "cjson" ]; then
+    git clone https://github.com/DaveGamble/cJSON.git cjson
+    cd cjson && git checkout 87d8f0961a01bf09bef98ff89bae9fdec42181ee
+    mkdir build && cd build && cmake .. && make && cd ../../
+fi
+
+echo "==================> libcanard"
+# libcanard
+if [ ! -d "libcanard" ]; then
+    git clone https://github.com/OpenCyphal/libcanard.git libcanard
+    cd libcanard && git checkout 43de1c4966b8d1e5d57978949d63e697f045b358
+    git submodule update --init --recursive
+    cp -rf ../libcanard_patches/* .
+    patch -d . -p1 < canard_stm32.patch && patch -d . -p1 < transport.py.patch
+fi
+
+echo "==================> libcsp"
+# libcsp
+if [ ! -d "libcsp" ]; then
+    git clone https://github.com/libcsp/libcsp.git libcsp
+    cd libcsp && git checkout 48f7fb0b57f610bf65bab1aa2d1357c3b9722782 && cd -
+fi
+
+echo "==================> custom_printf"
+# custom_printf
+if [ ! -d "custom_printf" ]; then
+    git clone https://github.com/mpaland/printf.git custom_printf
+fi
+
+echo "==================> Lets download selected modules' dependencies"
+for item in "${MODULES[@]}"; do
+    if [[ "$item" == *"stm32l4a6_freertos"* ]]; then
+        git clone https://github.com/STMicroelectronics/stm32l4xx_hal_driver.git STM32L4XX_HAL
+    fi
+    if [[ "$item" == *"stm32f103_libcanard"* ]]; then
+        git clone https://github.com/STMicroelectronics/stm32f1xx-hal-driver.git STM32F103X_HAL
+    fi
+    if [[ "$item" == *"stm32l4a6_freertos"* || "$item" == *"stm32f103_libcanard"* ]]; then
+        git clone https://github.com/modm-io/cmsis-header-stm32.git cmsis-header-stm32
+        git clone https://github.com/ARM-software/CMSIS_5.git CMSIS_5
+        git clone https://github.com/FreeRTOS/FreeRTOS-Kernel.git FreeRTOS-Kernel
+
+        git clone https://github.com/STMicroelectronics/OpenOCD.git openocd
+         cat openocd/tcl/board/stm32f103c8_blue_pill.cfg | sed -e "s/set FLASH_SIZE 0x20000/set FLASH_SIZE 0x10000/" > openocd/tcl/board/stm32f103c8_custom.cfg
+    fi
+done
+
+echo "==================> Lets download and compile modules"
+for item in "${MODULES[@]}"; do
+    if [[ "$item" == *"bbb_yocto"* ]]; then
+        ## special case for bbb_yocto, it cannot be run as root
+        ./dyshell -b -c "cd /workspace/$item && ./setupenv && cd -"
+    else
+        ./dyshell -b -s -c "cd /workspace/$item && ./setupenv && cd -"
+    fi
+done

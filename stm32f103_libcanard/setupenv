@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# since we are building more than one stm32 module in this project, we treat their depedencies common and handled in parent folder
+# so we dont need to do anything here
+
+# clone and build stm32f103_libcanard module
+echo "==================> clone and build stm32f103_libcanard module"
+if [ ! -d "stm32f103_libcanard" ]; then
+    git clone https://github.com/dogusyuksel/stm32f1-master-example.git stm32f103_libcanard
+fi
+
+export WORKSPACE="/workspace/stm32f103_libcanard/stm32f103_libcanard"
+export THIRDPARTY="/workspace"
+cd stm32f103_libcanard/application_firmware && ./build.sh && cd -

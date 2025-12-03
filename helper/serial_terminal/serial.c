@@ -1,0 +1,155 @@
+
+#include <errno.h>
+#include <fcntl.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/poll.h>
+#include <termios.h>
+#include <unistd.h>
+#include <stdbool.h>
+#include <sys/stat.h>
+
+#define VERSION "2.0.0."
+#define TIMEOUT_MS 5000
+
+static int set_interface_attribs(int fd, int speed) {
+  struct termios tty;
+  (void)speed;
+  memset(&tty, 0, sizeof(tty));
+
+  if (tcgetattr(fd, &tty) != 0) {
+    fprintf(stderr, "Serial tcgetattr error\n");
+    return 1;
+  }
+
+  tty.c_cflag &= ~PARENB;
+  tty.c_cflag &= ~CSTOPB;
+  tty.c_cflag |= CS8;
+  tty.c_cflag &= ~CSIZE;
+
+  cfsetospeed(&tty, speed);
+  cfsetispeed(&tty, speed);
+  cfmakeraw(&tty);
+
+  if (tcsetattr(fd, TCSANOW, &tty)) {
+    fprintf(stderr, "Serial tcsetattr error\n");
+    return 1;
+  }
+
+  return 0;
+}
+
+static void *console_listener_task(void *vargp) {
+  int rc;
+  char buffer[5000];
+  struct pollfd fds[1];
+  unsigned char byte = 0;
+  int fd = -1;
+
+  if (!vargp) {
+    goto out;
+  }
+
+  fd = *((int *)vargp);
+
+  fds[0].fd = STDIN_FILENO;
+  fds[0].events = POLLIN;
+
+  while (1) {
+    rc = poll(fds, 1, TIMEOUT_MS);
+    if (rc < 0) {
+      fprintf(stderr, "poll() failed");
+      goto out;
+    }
+
+    if (fds[0].revents != POLLIN) {
+      continue;
+    }
+
+    memset(buffer, 0, sizeof(buffer));
+
+    while (read(fds[0].fd, &byte, sizeof(unsigned char)) == 1) {
+      if (write(fd, &byte, 1) == -1) {
+        fprintf(stderr, "write() failed");
+      }
+    }
+  }
+
+out:
+  pthread_exit(NULL);
+}
+
+static void *uart_listener_task(void *vargp) {
+  int rc;
+  struct pollfd fds[1];
+  unsigned char byte = 0;
+  int fd = -1;
+
+  if (!vargp) {
+    goto out;
+  }
+
+  fd = *((int *)vargp);
+
+  fds[0].fd = fd;
+  fds[0].events = POLLIN; // poll input events
+
+  while (1) {
+    rc = poll(fds, 1, TIMEOUT_MS);
+    if (rc < 0) {
+      fprintf(stderr, "poll() failed");
+      goto out;
+    }
+
+    if (fds[0].revents != POLLIN) {
+      continue;
+    }
+
+    while (read(fds[0].fd, &byte, sizeof(unsigned char)) == 1) {  
+        if (write(STDOUT_FILENO, &byte, 1) == -1) {
+            fprintf(stderr, "write() failed");
+        }
+    }
+  }
+
+out:
+  pthread_exit(NULL);
+}
+
+int main(int argn, char **args) {
+  char *portname = NULL;
+  pthread_t tid1;
+  pthread_t tid2;
+  int fd = -1;
+
+  if (argn < 2) {
+    fprintf(stderr, "give port name as argument\n");
+    return 1;
+  }
+  fprintf(stderr, "%s version: %s\n", args[0], VERSION);
+
+  portname = args[1];
+
+  fd = open(portname, O_RDWR);
+  if (fd < 0) {
+    fprintf(stderr, "port cannot opened\n");
+    return 1;
+  }
+
+  set_interface_attribs(fd, B115200);
+
+  pthread_create(&tid2, NULL, console_listener_task, &fd);
+  sleep(2); // be sure console_listener_task() is executed first
+  pthread_create(&tid1, NULL, uart_listener_task, &fd);
+
+  pthread_join(tid1, NULL);
+  pthread_join(tid2, NULL);
+
+  if (fd > 0) {
+    close(fd);
+  }
+
+  return 0;
+}
