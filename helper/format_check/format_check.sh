@@ -13,6 +13,4 @@ while IFS= read -r line; do
     fi
 done <<< "$files"
 
-./dirty_check.sh
-
 exit 0
