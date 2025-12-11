@@ -98,7 +98,6 @@ RUN pip install isort==6.0.1
 RUN pip install pandas==2.3.0
 RUN pip install xgboost==3.0.2
 RUN pip install pulp==3.2.1
-RUN pip install -U scikit-learn
 RUN pip install ffmpeg_python==0.2.0
 RUN pip install openai==1.86.0
 RUN pip install opencv_python==4.10.0.84
