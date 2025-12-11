@@ -12,3 +12,10 @@ cd libcsp_works/rust-server
 cd bindings-creator && cargo clean && cargo build && cd -
 cd csp-server && cargo clean && cargo build && cd -
 cd ../../
+
+export WORKSPACE_PATH="/workspace/libcsp_works/libcsp_works"
+export EMBEDDED_PROJECT_PATH="/workspace/libcsp_works/libcsp_works/embedded-client"
+export THIRDPARTY_PATH="/workspace"
+cd libcsp_works/embedded-client
+./build.sh "/workspace/libcsp_works/libcsp_works/embedded-client" "/workspace"
+cd ../..
