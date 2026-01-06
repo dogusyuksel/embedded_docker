@@ -91,8 +91,8 @@ RUN pip install gcovr
 RUN pip install Pillow==9.5.0
 RUN pip install json_repair==0.30.0
 RUN pip install Requests==2.32.3
-RUN pip install black==21.12b0
-RUN pip install click==8.0.4
+RUN pip install black==25.12.0
+RUN pip install click==8.3.1
 RUN pip install flake8==4.0.1
 RUN pip install isort==6.0.1
 RUN pip install pandas==2.3.0
