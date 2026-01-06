@@ -152,7 +152,7 @@ RUN cd / && mkdir esp && cd esp && \
     tar -xzf xtensa-lx106-elf-gcc8_4_0-esp-2020r3-linux-amd64.tar.gz
 ENV PATH="/esp/xtensa-lx106-elf/bin:${PATH}"
 
-# rust related
+# Rust related
 # Rust + Cargo
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
     | sh -s -- -y
